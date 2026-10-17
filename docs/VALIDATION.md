@@ -59,9 +59,20 @@ A contrast issue in the initial input and answer borders was corrected. These ch
 |---|---:|---|---|
 | Community relevance | 25% | Narrow tutoring workflow; sourced national context. | A real, specific creator-observed local example is essential. |
 | Impact potential | 20% | Small standalone files, no accounts, manual private return, tutor-centered actions. | Pilot usability and preparation-time measures; learning impact remains unproven. |
-| Technical execution | 20% | Working authoring/learner/export/import/plan/backup flows; 15 automated checks. | Public deployment and final production smoke test recorded separately. |
+| Technical execution | 20% | Working authoring/learner/export/import/plan/backup flows; 15 automated checks. | Public deployment and production smoke test passed; real-device offline checks remain. |
 | Creativity | 15% | English/Urdu micro-lesson → return file → next-session actions. | Existing offline tools are acknowledged; no first-in-market claim. |
 | Presentation and clarity | 10% | Focused interface, explanations, honest research and boundaries. | Final 2–6 minute working demo after review. |
 | Accessibility | 10% | RTL, responsive layout, readable contrast, semantic controls, keyboard focus styles, no login. | Physical device and assistive-technology pilot. |
 
 No defensible measurement can promise that judges will award 100%. The prototype's readiness and its evidence gaps are reported separately.
+
+## Production deployment and final smoke test
+
+- Vercel production deployment: **READY**, 17 October 2026. Public URL: https://sabaqslip.vercel.app/
+- Public repository: https://github.com/adeelfalaksher900-creator/SabaqSlip
+- Functional source commit: `3d6a88b25643521af590f1da0e135f8ab81e84e2`. Subsequent changes are documentation only.
+- Public site opens without a login wall; its footer reports the application cache ready. No application errors were observed in the inspected production console; extension logs were excluded.
+- A complete production learner attempt gives **3/3**. Saving its return twice produces identical files with the same attempt ID, preventing accidental double counting.
+- Production-generated HTML download: **12,994 bytes** after minification. Its script matches the embedded CSP hash, it blocks connections, and it contains no remote resource references. The build-time unminified example remains 13,928 bytes.
+- This browser environment does not allow `file:` navigation. Therefore, direct local-file opening and a physically disconnected network test are explicitly not claimed. The hosted standalone runtime was tested end to end.
+- Devpost preview persists the project story, tools, live link and repository link. The event entry remains **DRAFT, 3/5 steps complete**, awaiting media and creator review. Terms were not accepted and final submission was not performed.

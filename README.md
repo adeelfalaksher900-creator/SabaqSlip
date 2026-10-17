@@ -2,6 +2,8 @@
 
 Small offline lessons. Private return slips. A useful next tutoring session.
 
+[Live website](https://sabaqslip.vercel.app/) · [Devpost review draft](https://devpost.com/software/sabaqslip)
+
 SabaqSlip is an English/Urdu web app for community tutors. A tutor creates a short activity, shares one self-contained HTML file, and imports the learner's small JSON return slip. The tutor gets question-specific explanations and follow-up prompts, ordered by the latest answers and self-reported confidence.
 
 Built for Neighborhood Hacks 2026, **Education & Access**. This is a working prototype; no local pilot or measured learning improvement is claimed.
