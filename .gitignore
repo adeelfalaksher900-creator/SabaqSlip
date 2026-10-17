@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.vite/
+.env
+.env.*
+!.env.example
+.openai/*
+!.openai/hosting.json
+public/offline-example.html
+public/example-return.json
+public/example-lesson.json
+qa/
+
+public/__qa__.html
