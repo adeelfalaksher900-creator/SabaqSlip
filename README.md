@@ -1,61 +1,106 @@
 # SabaqSlip
 
-Small offline lessons. Private return slips. A useful next tutoring session.
+**Small offline lessons. Private return slips. A useful next tutoring session.**
 
-[Live website](https://sabaqslip.vercel.app/) · [Devpost review draft](https://devpost.com/software/sabaqslip)
+![React](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES_modules-F7DF1E?logo=javascript&logoColor=111827)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
+![MIT](https://img.shields.io/badge/License-MIT-2563EB)
 
-SabaqSlip is an English/Urdu web app for community tutors. A tutor creates a short activity, shares one self-contained HTML file, and imports the learner's small JSON return slip. The tutor gets question-specific explanations and follow-up prompts, ordered by the latest answers and self-reported confidence.
+[Open SabaqSlip](https://sabaqslip.vercel.app/) · [Devpost draft](https://devpost.com/software/sabaqslip) · [Research](docs/RESEARCH.md) · [Validation](docs/VALIDATION.md) · [Security](SECURITY.md)
 
-Built for Neighborhood Hacks 2026, **Education & Access**. This is a working prototype; no local pilot or measured learning improvement is claimed.
+SabaqSlip is an English/Urdu workspace for community tutors. Create a short activity, share one self-contained HTML file, and import the learner's small JSON return slip. The next-session plan connects each question to its explanation and follow-up prompt, ordered using the latest answers and self-reported confidence.
+
+Built for Neighborhood Hacks 2026, **Education & Access**. It is a working prototype; a local pilot or measured learning improvement has not been established.
+
+## What you can do
+
+| Tutor workspace | Offline learner activity |
+| --- | --- |
+| Start from four original English/Urdu lessons | Open a self-contained HTML file |
+| Author 1–8 questions, answer keys and teaching prompts | Read, answer and record confidence |
+| Export, back up, restore and print lesson materials | Review feedback and save a JSON return slip |
+| Validate returns and inspect the next-session plan | Exchange the small file through an existing private channel |
+
+Starter lessons cover fractions, percentages, reading evidence and equations. The interface includes Urdu RTL layouts, semantic controls, visible keyboard focus, dialog focus management and a skip link.
 
 ## Try the workflow
 
-1. Choose one of four original starter lessons, or create an edited copy.
-2. Preview the activity, or export **offline HTML**. Save the file and open it in a full browser. Some mobile file previews and messaging apps do not execute HTML.
-3. Use a learner code such as `B07`, answer the questions, and save the return slip.
-4. Give that JSON file to the tutor through an existing private channel. It does not send itself.
-5. Import the return slip in the workspace. Inspect the answer details and next-session plan.
+1. Choose a starter lesson, or create an edited copy.
+2. Preview it or export **offline HTML**. Open the saved file in a full browser; messaging apps and file previews may not execute HTML.
+3. Use a learner code such as `B07`, answer each question and save the return slip.
+4. Give the JSON file to the tutor through an existing private channel. The file does not send itself.
+5. Import it in the tutor workspace and inspect answer details and follow-up prompts.
 
-For a quick demonstration, **How it works → Try clearly labeled example returns** creates fictional examples. They are labeled and separated from real returns.
+**How it works → Try clearly labeled example returns** provides fictional demonstration data, separated from real returns.
+
+## Architecture
+
+```mermaid
+flowchart TD
+  T["Tutor workspace"] --> L["Validated lesson and fingerprint"]
+  L --> H["Standalone offline HTML"]
+  H --> A["Learner answers and confidence"]
+  A --> J["JSON return slip"]
+  J --> V["Schema, version and duplicate checks"]
+  L --> V
+  V --> P["Tutor scoring and follow-up plan"]
+  T --> S["Local workspace and backups"]
+```
+
+React and Vite deliver the workspace. Zod validates bounded lesson/return formats, while Noble Hashes supplies SHA-256 lesson-version fingerprints. The exported learner activity embeds its content and runtime without remote scripts, fonts or APIs. No account, paid API or cloud answer database is required.
+
+Fingerprints detect lesson-version mismatches; they do not authenticate a learner. Tutor-side scoring is based on validated returns, not an AI service.
 
 ## Run locally
 
-Use Node.js 22 or newer and npm.
+Use Node.js 22.12 or newer and npm.
 
 ```sh
+git clone https://github.com/adeelfalaksher900-creator/SabaqSlip.git
+cd SabaqSlip
 npm ci
 npm run dev -- --host 0.0.0.0 --port 4173
 ```
 
-```sh
-npm test
-npm run build
-npm run test:sites
-npm run preview -- --host 0.0.0.0 --port 4174
-```
+| Command | Purpose |
+| --- | --- |
+| `npm test` | Core lesson/return-format tests |
+| `npm run build` | Production workspace, offline example and Sites packaging |
+| `npm run test:sites` | Optional Sites worker/package tests |
+| `npm run preview -- --host 0.0.0.0 --port 4174` | Inspect the production build |
 
-The static app is in `dist/client/`. The build also emits a self-contained `offline-example.html`, example JSON files, and a revisioned service worker. Vercel can host `dist/client/` with the repository's `vercel.json` copied into the deployment root. The original optional Sites runtime is retained.
+## Deployment
 
-## What is implemented
+The static application is emitted to `dist/client/`. The build also creates `offline-example.html`, example JSON files and a revisioned service worker. Vercel can host `dist/client/`; use the repository's `vercel.json` in the deployment root. The optional Sites runtime remains available and is separate from the tutoring data flow.
 
-- Four original English/Urdu starter lessons: fractions, percentages, reading evidence and equations.
-- Lesson authoring with optional Urdu translations, 1–8 questions, answer keys, explanations, teaching steps and follow-up questions.
-- Standalone HTML export with no remote scripts, fonts, APIs or connection requirements.
-- Answer and confidence capture, feedback and a small JSON return file.
-- Exact lesson-version fingerprints, strict file validation, tutor-side scoring and duplicate protection.
-- Latest-attempt planning, fictional example labels, local persistence, backup/restore and print styles.
-- Responsive layouts, Urdu RTL, semantic controls, visible focus, dialog focus management and a skip link.
+No environment variables, database migration or inference key is required for the core workflow.
 
-## Boundaries
+## Privacy and boundaries
 
-This is formative practice, not a secure exam system or a diagnosis of student ability. The HTML contains its answer key. Files are self-reported and unsigned. Fingerprints catch version mismatches; they do not authenticate a learner. Confidence is a conversation prompt.
+This is formative practice, not a secure exam or a diagnosis of ability. The exported HTML contains its answer key. Returns are self-reported and unsigned; confidence starts a conversation rather than proving understanding.
 
-Workspace files remain in this browser's local storage, which is **not encrypted**. Downloads and backups must be kept private. Hosting still receives ordinary page requests. There are no learner accounts, analytics, paid APIs or cloud answer database. A device, JavaScript-capable browser and a way to exchange files are required.
+Workspace data stays in local browser storage, which is **not encrypted**. Protect downloaded lessons, returns and backups. Hosting still receives ordinary page requests. A JavaScript-capable browser and a way to exchange files are required. See [SECURITY.md](SECURITY.md) for the full boundary.
 
-See [research and differentiation](docs/RESEARCH.md), [security boundaries](SECURITY.md), and [validation](docs/VALIDATION.md).
+## Project map
 
-## Credits and AI disclosure
+| Path | Purpose |
+| --- | --- |
+| `src/App.jsx` | Tutor workspace and return management |
+| `src/Builder.jsx` | Lesson authoring |
+| `src/Learner.jsx` | Learner activity interface |
+| `src/lib/core.js` | Schemas, fingerprints, scoring and validation |
+| `src/lib/export.js` | Standalone HTML export |
+| `src/lib/i18n.js` | English/Urdu copy |
+| `scripts/build-offline.mjs` | Offline example and generated assets |
+| `tests/` | Core and Sites packaging tests |
 
-Original application and lesson content were developed during the event with AI coding and design assistance. React, Vite, Zod, Noble Hashes, Phosphor Icons, Inter, Libre Baskerville and Noto Naskh Arabic are dependencies. A generated design reference informed the interface. No generated learner evidence, interviews, testimonials or impact numbers are used. AI is not required when the app runs.
+## Contributing
 
-MIT license covers original code and lesson text. Dependency and font licenses remain their own.
+Open an issue with the affected workflow, expected behavior and a small fictional lesson or return slip. For a change, create a branch, run `npm test`, `npm run build` and `npm run test:sites`, then open a pull request. Do not include real learner identities, private return files or credentials in an issue.
+
+## License and credits
+
+[MIT](LICENSE) covers original code and lesson text. Dependencies and fonts retain their licenses; see [third-party notices](public/THIRD_PARTY_NOTICES.txt).
+
+The project was developed during the event with AI coding and design assistance; AI is not needed at runtime. No generated learner evidence, interviews, testimonials or impact figures are used.
